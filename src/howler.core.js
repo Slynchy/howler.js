@@ -2270,7 +2270,16 @@
         self._node.addEventListener('ended', self._endFn, false);
 
         // Setup the new audio node.
-        self._node.src = parent._src;
+        if(Array.isArray(parent._src)) {
+          for(var i = 0; i < parent._src.length; i++) {
+            const srcString = parent._src[i];
+            const srcElement = document.createElement('source');
+            srcElement.src = srcString;
+            self._node.appendChild(srcElement);
+          }
+        } else {
+          self._node.src = parent._src;
+        }
         self._node.preload = parent._preload === true ? 'auto' : parent._preload;
         self._node.volume = volume * Howler.volume();
 
